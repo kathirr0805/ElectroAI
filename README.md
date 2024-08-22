@@ -59,5 +59,5 @@ Contact
 
 If you have any questions or need further assistance, feel free to reach out to the project maintainer:
 
-Kathirr0805 - kathirr0805@gmail.com
+Kathirr0805 - itz.kathir2005@gmail.com
 GitHub: kathirr0805
