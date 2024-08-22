@@ -34,11 +34,13 @@ Install the Required Dependencies:
 Ensure you have Python installed. Then, install the necessary Python packages using pip:
 
 pip install -r requirements.txt
+
 Run the Application:
 
 Start the Flask application:
 
 python app.py
+
 Access the Application:
 
 Open your web browser and navigate to http://127.0.0.1:5000 to start interacting with the AI assistant.
@@ -48,7 +50,9 @@ Usage
 Voice Commands: Use voice commands to interact with the assistant. For example, ask for details about an electronic component or request a project suggestion based on the components you have.
 Project Suggestions: Input the components you have, and the assistant will suggest possible projects and provide connection instructions.
 Wikipedia Integration: Ask the assistant to search for topics on Wikipedia for quick information retrieval.
+
 Contributing
+
 Contributions to "From Siri to SmartyPants: Building Your Personalized AI Assistant" are welcome! If you'd like to contribute, please fork the repository, create a new branch, and submit a pull request. You can also report issues or request new features via the issue tracker.
 
 Contact
