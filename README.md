@@ -1,4 +1,5 @@
-From Siri to SmartyPants: Building Your Personalized AI Assistant
+ELECTRO AI
+
 Overview
 "From Siri to SmartyPants: Building Your Personalized AI Assistant" is an innovative virtual assistant specifically designed for electronics enthusiasts and learners. This AI-powered assistant leverages advanced technologies such as speech recognition, natural language processing, text-to-speech conversion, and an extensive database of electronic components to provide a comprehensive platform for exploring electronics. Users can interact with the assistant through voice commands, ask questions, generate project ideas, and receive detailed explanations, making the learning process interactive, engaging, and practical.
 
