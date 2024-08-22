@@ -26,6 +26,7 @@ To get started with the project, follow these steps:
 
 Clone the Repository:
 git clone https://github.com/kathirr0805/ElectroAI.git
+
 cd ElectroAI
 
 Install the Required Dependencies:
