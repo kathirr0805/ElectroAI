@@ -1,12 +1,10 @@
-import speech_recognition as sr
+import pandas as pd
 import pyttsx3
 import datetime
 import wikipedia
 import webbrowser
 import random
-import schedule
-from intentstrain import intents
-from projectstrain import projects
+from speech_recognition import Recognizer, Microphone
 import os
 import subprocess
 
@@ -17,6 +15,46 @@ engine = pyttsx3.init()
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)  # Index 1 typically corresponds to a female voice
 
+# Determine the directory of the current script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Load intents from Excel in the 'Intents' folder
+intents_file_path = os.path.join(script_dir, 'Intents', 'intents.xlsx')
+if os.path.exists(intents_file_path):
+    intents_df = pd.read_excel(intents_file_path, engine='openpyxl')
+else:
+    print(f"Error: The file {intents_file_path} does not exist.")
+    intents_df = pd.DataFrame(columns=['Intent', 'Pattern', 'Response'])
+
+# Convert DataFrame to dictionary
+intents = {}
+for _, row in intents_df.iterrows():
+    intent = row['Intent']
+    pattern = row['Pattern'].lower()
+    response = row['Response']
+    
+    if intent not in intents:
+        intents[intent] = {"patterns": [], "responses": []}
+    
+    intents[intent]["patterns"].append(pattern)
+    intents[intent]["responses"].append(response)
+
+# Load projects from Excel in the 'Projects' folder
+projects_file_path = os.path.join(script_dir, 'Projects', 'projects.xlsx')
+if os.path.exists(projects_file_path):
+    projects_df = pd.read_excel(projects_file_path, engine='openpyxl')
+else:
+    print(f"Error: The file {projects_file_path} does not exist.")
+    projects_df = pd.DataFrame(columns=['Project', 'Components', 'Connection'])
+
+# Convert DataFrame to dictionary
+projects = {}
+for _, row in projects_df.iterrows():
+    project = row['Project']
+    components = row['Components'].split(', ')
+    connection = row['Connection']
+    projects[project] = {"components": components, "connection": connection}
+
 # Function to generate a response based on user input
 def get_response(user_input):
     user_input_lower = user_input.lower()  # Convert user_input to lowercase
@@ -26,7 +64,6 @@ def get_response(user_input):
             if pattern_lower in user_input_lower:
                 return random.choice(data["responses"])
     return "I'm sorry, I don't understand that."
-
 
 # Function to suggest a project based on user components
 def suggest_project(components):
@@ -45,8 +82,8 @@ def speak_and_print(text, rate=150):
 
 # Function to recognize speech
 def take_command():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
+    r = Recognizer()
+    with Microphone() as source:
         print("Listening...")
         r.pause_threshold = 1
         audio = r.listen(source)
@@ -70,7 +107,6 @@ def wish_me():
     else:
         speak_and_print("Good Evening")
     speak_and_print("I am Electro AI. How may I assist you today?")
-
 
 if __name__ == "__main__":
     wish_me()
@@ -109,21 +145,21 @@ if __name__ == "__main__":
         elif 'app' in query:
             app_name = query.split('app ')[1].lower()  
             app_executables = {
-    'calculator': 'C:\\Windows\\System32\\calc.exe',
-    'notepad': 'C:\\Windows\\System32\\notepad.exe',
-    'Edge': 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-    'word': 'C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE',
-    'excel': 'C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE',
-    'powerpoint': 'C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE',
-    'proteus': r'C:\Program Files (x86)\Labcenter Electronics\Proteus 8 Professional\BIN\PDS.EXE',
-    'matlab': r'C:\Program Files\MATLAB\R2013a\bin\matlab.exe',
-    'arduino': r'C:\Users\Home\AppData\Local\Programs\Arduino IDE\Arduino IDE.exe',
-    'kicad': r'C:\Program Files\KiCad\8.0\bin\kicad.exe',
-    'pcb': r'C:\Program Files\KiCad\8.0\bin\kicad.exe',
-}
+                'calculator': 'C:\\Windows\\System32\\calc.exe',
+                'notepad': 'C:\\Windows\\System32\\notepad.exe',
+                'Edge': 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
+                'word': 'C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE',
+                'excel': 'C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE',
+                'powerpoint': 'C:\\Program Files\\Microsoft Office\\root\\Office16\\POWERPNT.EXE',
+                'proteus': r'C:\Program Files (x86)\Labcenter Electronics\Proteus 8 Professional\BIN\PDS.EXE',
+                'matlab': r'C:\Program Files\MATLAB\R2013a\bin\matlab.exe',
+                'arduino': r'C:\Users\Home\AppData\Local\Programs\Arduino IDE\Arduino IDE.exe',
+                'kicad': r'C:\Program Files\KiCad\8.0\bin\kicad.exe',
+                'pcb': r'C:\Program Files\KiCad\8.0\bin\kicad.exe',
+            }
             if app_name in app_executables:
                 app_executable = app_executables[app_name]
-                subprocess.Popen(app_executable)  # Open the specified appelse
+                subprocess.Popen(app_executable)  # Open the specified app
                 speak_and_print(f"Opening {app_name.capitalize()} application")
             else:
                 speak_and_print("App not found. Please specify a valid app name.")      
